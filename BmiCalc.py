@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Query
 
 
 app = FastAPI()
@@ -9,7 +9,9 @@ def Hi():
     return {"message": "Sup Fasty"}
 
 @app.get("/calculate_bmi")
-def calculate_bmi(weight: float, height: float):
+def calculate_bmi(
+    weight: float = Query(..., gt= 20, lt=200, description="weight (kg)"),
+    height: float = Query(..., gt= 1, lt=3, description="height (m)")):
     bmi = weight / (height ** 2)
     
     
