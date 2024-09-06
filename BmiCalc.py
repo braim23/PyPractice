@@ -1,7 +1,23 @@
 from fastapi import FastAPI, Query
+from pydantic import BaseModel
 
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+class BMIOutput(BaseModel):
+    bmi: float
+    message: str
+
+
+
 
 @app.get("/")
 
@@ -24,7 +40,4 @@ def calculate_bmi(
     else:
         message = "You're too fat, go see a doctor."
 
-    return {
-            "bmi": bmi,
-            "message": message
-    }
+    return BMIOutput(bmi=bmi,message=message)
